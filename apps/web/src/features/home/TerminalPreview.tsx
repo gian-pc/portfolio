@@ -1,4 +1,44 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+const output = `$ sst deploy --stage prod
+✓ API Gateway ready
+✓ Lambda contact-form deployed
+✓ S3 assets synced
+✓ CloudFront cache invalidated
+Done in 14.2s`;
+
 export function TerminalPreview() {
+  const [index, setIndex] = useState(0);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(media.matches);
+
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setIndex(output.length);
+      return;
+    }
+    if (index >= output.length) return;
+
+    const id = window.setTimeout(() => {
+      setIndex((prev) => Math.min(prev + 1, output.length));
+    }, 18);
+
+    return () => window.clearTimeout(id);
+  }, [index, reducedMotion]);
+
+  const text = output.slice(0, index);
+  const finished = index >= output.length;
+
   return (
     <div
       style={{
@@ -33,14 +73,11 @@ export function TerminalPreview() {
           lineHeight: 1.7,
           color: "var(--text-secondary)",
           overflowX: "auto",
+          minHeight: 164,
         }}
       >
-{`$ sst deploy --stage prod
-✓ API Gateway ready
-✓ Lambda contact-form deployed
-✓ S3 assets synced
-✓ CloudFront cache invalidated
-Done in 14.2s`}
+        {text}
+        {!finished && <span style={{ color: "var(--accent)" }}>|</span>}
       </pre>
     </div>
   );
