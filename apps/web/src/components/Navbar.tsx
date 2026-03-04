@@ -19,7 +19,7 @@ export function Navbar() {
         left: "50%",
         transform: "translateX(-50%)",
         zIndex: 50,
-        width: "min(94vw, 1120px)",
+        width: "min(1100px, calc(100vw - 48px))",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",

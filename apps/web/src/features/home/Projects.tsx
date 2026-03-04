@@ -15,6 +15,7 @@ type Project = {
     light: string;
     dark: string;
   };
+  coverFit?: "cover" | "contain";
   coverPosition?: string;
 };
 
@@ -37,7 +38,8 @@ const projects: Project[] = [
       light: "/projects/retainai-light.png",
       dark: "/projects/retainai-dark.png",
     },
-    coverPosition: "center 15%",
+    coverFit: "contain",
+    coverPosition: "center center",
   },
   {
     emoji: "🏠",
@@ -133,7 +135,7 @@ export function Projects() {
                 <div
                   style={{
                     height: 260,
-                    background: p.gradient,
+                    background: p.coverByTheme ? "var(--surface)" : p.gradient,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -142,18 +144,38 @@ export function Projects() {
                   }}
                 >
                   {p.coverByTheme ? (
-                    <img
-                      src={theme === "dark" ? p.coverByTheme.dark : p.coverByTheme.light}
-                      alt={`${p.title} preview`}
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: p.coverPosition ?? "center",
-                      }}
-                    />
+                    <>
+                      {p.coverFit === "contain" && (
+                        <img
+                          src={theme === "dark" ? p.coverByTheme.dark : p.coverByTheme.light}
+                          alt=""
+                          aria-hidden="true"
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            objectPosition: p.coverPosition ?? "center",
+                            filter: "blur(8px) saturate(0.85)",
+                            opacity: 0.35,
+                            transform: "scale(1.05)",
+                          }}
+                        />
+                      )}
+                      <img
+                        src={theme === "dark" ? p.coverByTheme.dark : p.coverByTheme.light}
+                        alt={`${p.title} preview`}
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          width: "100%",
+                          height: "100%",
+                          objectFit: p.coverFit ?? "cover",
+                          objectPosition: p.coverPosition ?? "center",
+                        }}
+                      />
+                    </>
                   ) : (
                     <span style={{ position: "relative", zIndex: 1 }}>{p.emoji}</span>
                   )}
@@ -162,7 +184,9 @@ export function Projects() {
                       position: "absolute",
                       inset: 0,
                       background:
-                        "linear-gradient(to top, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.08) 42%, rgba(0,0,0,0) 72%)",
+                        p.coverFit === "contain"
+                          ? "linear-gradient(to top, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 42%, rgba(0,0,0,0) 72%)"
+                          : "linear-gradient(to top, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.08) 42%, rgba(0,0,0,0) 72%)",
                       zIndex: 1,
                     }}
                   />

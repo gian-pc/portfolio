@@ -21,18 +21,18 @@ export function Hero() {
             width: 56,
             height: 56,
             borderRadius: 14,
-            background: "linear-gradient(135deg,#F6264D,#fb923c)",
+            background: "linear-gradient(135deg,#d91f4e,#ef476f)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: 24,
+            fontSize: 18,
             fontWeight: 900,
             color: "#fff",
             marginBottom: 28,
-            boxShadow: "0 8px 24px rgba(246,38,77,0.35)",
+            boxShadow: "0 8px 20px rgba(217,31,78,0.22)",
           }}
         >
-          G
+          {"</>"}
         </div>
 
         {/* Badge */}
@@ -43,11 +43,11 @@ export function Hero() {
             gap: 8,
             padding: "6px 14px",
             borderRadius: "var(--radius-full)",
-            background: "rgba(246,38,77,0.1)",
-            border: "1px solid rgba(246,38,77,0.25)",
+            background: "rgba(217,31,78,0.08)",
+            border: "1px solid rgba(217,31,78,0.22)",
             fontSize: 11,
             fontWeight: 700,
-            color: "var(--accent)",
+            color: "#d91f4e",
             marginBottom: 24,
             textTransform: "uppercase" as const,
             letterSpacing: 2,
@@ -71,8 +71,8 @@ export function Hero() {
           <br />
           <span
             style={{
-              background: "linear-gradient(90deg,#F6264D,#fb923c,#F6264D)",
-              backgroundSize: "200%",
+              background: "linear-gradient(90deg,#d91f4e,#ef476f,#d91f4e)",
+              backgroundSize: "180%",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
@@ -108,7 +108,7 @@ export function Hero() {
               fontWeight: 700,
               fontSize: 13,
               textDecoration: "none",
-              boxShadow: "0 8px 24px rgba(246,38,77,0.3)",
+              boxShadow: "0 8px 18px rgba(217,31,78,0.2)",
             }}
           >
             Ver artículos →
