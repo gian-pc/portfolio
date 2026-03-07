@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 
-const output = `$ sst deploy --stage prod
-✓ API Gateway ready
-✓ Lambda contact-form deployed
-✓ S3 assets synced
-✓ CloudFront cache invalidated
-Done in 14.2s`;
+const output = `$ mvn clean verify
+✓ 42 tests passed (Spring Boot)
+✓ Security filters validated
+$ docker compose up -d api mysql
+✓ backend-api running on :8080
+$ curl -X POST /api/v1/churn/predict
+{"risk":"high","score":0.87,"segment":"retail"}`;
 
 export function TerminalPreview() {
   const [index, setIndex] = useState(0);

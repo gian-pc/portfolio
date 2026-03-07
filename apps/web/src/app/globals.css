@@ -2,15 +2,15 @@
 
 /* Tokens */
 :root {
-  --bg: #f0f1f5;
+  --bg: #ffffff;
   --surface: #ffffff;
   --border: rgba(0, 0, 0, 0.07);
   --text-primary: #111111;
   --text-secondary: #6b7280;
   --accent: #f6264d;
-  --terminal-bg: rgba(255, 255, 255, 0.84);
-  --terminal-border: rgba(15, 23, 42, 0.12);
-  --terminal-shadow: 0 18px 36px rgba(15, 23, 42, 0.16);
+  --terminal-bg: #ffffff;
+  --terminal-border: rgba(15, 23, 42, 0.1);
+  --terminal-shadow: 0 14px 28px rgba(15, 23, 42, 0.1);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -44,7 +44,7 @@ html {
 body {
   background: var(--bg);
   color: var(--text-primary);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   transition: background var(--duration-base), color var(--duration-base);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
@@ -174,7 +174,7 @@ pre,
   inset: 124px -180px -130px -180px;
   overflow: visible;
   pointer-events: none;
-  opacity: 1;
+  opacity: 0.24;
   z-index: 0;
   -webkit-mask-image: linear-gradient(
     to bottom,
@@ -195,16 +195,24 @@ pre,
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.50;
+  opacity: 0.16;
 }
 
 .hero-map-masses path {
   fill: none;
-  stroke: rgba(100, 116, 139, 0.28);
+  stroke: rgba(100, 116, 139, 0.16);
   stroke-width: 1;
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
+}
+
+.dark .hero-map-bg {
+  opacity: 1;
+}
+
+.dark .hero-map-svg {
+  opacity: 0.5;
 }
 
 .dark .hero-map-masses path {
@@ -216,12 +224,7 @@ pre,
 .hero-map-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at var(--hero-lima-left, 34.8%) var(--hero-lima-top, 67.5%),
-    rgba(148, 163, 184, 0.06) 0%,
-    rgba(148, 163, 184, 0.02) 7%,
-    transparent 14%
-  );
+  background: none;
 }
 
 .dark .hero-map-vignette {

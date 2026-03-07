@@ -41,7 +41,7 @@ export function Hero() {
             letterSpacing: 2,
           }}
         >
-          ● Backend Engineer
+          ● Java Backend Developer
         </div>
 
         {/* Título */}
@@ -55,7 +55,7 @@ export function Hero() {
             color: "var(--text-primary)",
           }}
         >
-          Construyo APIs
+          Convierto lógica de negocio
           <br />
           <span
             style={{
@@ -65,7 +65,7 @@ export function Hero() {
               WebkitTextFillColor: "transparent",
             }}
           >
-            que escalan.
+            en APIs robustas.
           </span>
         </h1>
 
@@ -79,44 +79,11 @@ export function Hero() {
             color: "var(--text-secondary)",
           }}
         >
-          Especialista en arquitecturas Serverless sobre AWS. Transformo lógica
-          compleja en sistemas escalables, rápidos y seguros usando Java, Spring
-          Boot e IaC.
+          Java Backend Developer con base sólida en datos y sistemas técnicos.
+          Diseño APIs REST con Spring Boot, seguridad, SQL y despliegue en AWS
+          para productos escalables y mantenibles.
         </p>
 
-        {/* CTAs */}
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <a
-            href="/blog"
-            style={{
-              padding: "12px 24px",
-              borderRadius: "var(--radius-full)",
-              background: "var(--accent)",
-              color: "#fff",
-              fontWeight: 700,
-              fontSize: 13,
-              textDecoration: "none",
-              boxShadow: "0 8px 18px rgba(217,31,78,0.2)",
-            }}
-          >
-            Ver artículos →
-          </a>
-          <a
-            href="#contact"
-            style={{
-              padding: "12px 24px",
-              borderRadius: "var(--radius-full)",
-              background: "transparent",
-              fontWeight: 600,
-              fontSize: 13,
-              border: "1px solid var(--border)",
-              textDecoration: "none",
-              color: "var(--text-primary)",
-            }}
-          >
-            Contacto
-          </a>
-        </div>
       </div>
 
       <div style={{ flex: "1 1 360px", minWidth: 0, position: "relative", zIndex: 1 }}>

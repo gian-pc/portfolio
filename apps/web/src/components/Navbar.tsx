@@ -8,7 +8,6 @@ export function Navbar() {
   const isDark = theme === "dark";
   const links = [
     { label: "Inicio", href: "/" },
-    { label: "Blog", href: "/blog" },
     { label: "CV", href: "/cv" },
   ];
 
@@ -30,7 +29,7 @@ export function Navbar() {
         border: "1px solid var(--border)",
         background: theme === "dark"
           ? "rgba(22,24,31,0.85)"
-          : "rgba(240,241,245,0.85)",
+          : "rgba(255,255,255,0.88)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
       }}
@@ -78,9 +77,9 @@ export function Navbar() {
               padding: "7px 13px",
               borderRadius: "var(--radius-full)",
               fontSize: 13,
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: 1.1,
+              fontWeight: 600,
+              textTransform: "none",
+              letterSpacing: 0.2,
               textDecoration: "none",
               color: "var(--text-secondary)",
             }}
