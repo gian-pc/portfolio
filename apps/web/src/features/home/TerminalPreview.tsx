@@ -2,86 +2,76 @@
 
 import { useEffect, useState } from "react";
 
-const output = `$ mvn clean verify
-✓ 42 tests passed (Spring Boot)
-✓ Security filters validated
-$ docker compose up -d api mysql
-✓ backend-api running on :8080
-$ curl -X POST /api/v1/churn/predict
-{"risk":"high","score":0.87,"segment":"retail"}`;
+const lines = [
+  { text: "$ ./mvnw spring-boot:run", tone: "muted" },
+  { text: "✓ application started", tone: "ok" },
+  { text: "POST /api/v1/orders", tone: "default" },
+  { text: '{status:"ok"}', tone: "accent" },
+  { text: "GET /api/v1/reputation", tone: "default" },
+  { text: '{focus:"backend", growth:"systems + ai"}', tone: "accent" },
+] as const;
 
 export function TerminalPreview() {
-  const [index, setIndex] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [visibleLines, setVisibleLines] = useState<string[]>(() => lines.map(() => ""));
+  const [cursorLine, setCursorLine] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(media.matches);
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let cancelled = false;
 
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
+    const typeLine = (lineIndex: number, charIndex: number) => {
+      if (cancelled) return;
+      if (lineIndex >= lines.length) {
+        setIsFinished(true);
+        return;
+      }
+
+      setCursorLine(lineIndex);
+      const text = lines[lineIndex].text;
+      const safeCharIndex = Math.min(charIndex, text.length);
+
+      setVisibleLines((prev) => {
+        const next = [...prev];
+        next[lineIndex] = text.slice(0, safeCharIndex);
+        return next;
+      });
+
+      if (safeCharIndex < text.length) {
+        timeoutId = setTimeout(() => typeLine(lineIndex, safeCharIndex + 1), 24);
+        return;
+      }
+
+      timeoutId = setTimeout(() => typeLine(lineIndex + 1, 0), 180);
+    };
+
+    setVisibleLines(lines.map(() => ""));
+    setCursorLine(0);
+    setIsFinished(false);
+    timeoutId = setTimeout(() => typeLine(0, 0), 180);
+
+    return () => {
+      cancelled = true;
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
-  useEffect(() => {
-    if (reducedMotion) {
-      setIndex(output.length);
-      return;
-    }
-    if (index >= output.length) return;
-
-    const id = window.setTimeout(() => {
-      setIndex((prev) => Math.min(prev + 1, output.length));
-    }, 18);
-
-    return () => window.clearTimeout(id);
-  }, [index, reducedMotion]);
-
-  const text = output.slice(0, index);
-  const finished = index >= output.length;
-
   return (
-    <div
-      style={{
-        borderRadius: "var(--radius-lg)",
-        border: "1px solid var(--terminal-border)",
-        background: "var(--terminal-bg)",
-        boxShadow: "var(--terminal-shadow)",
-        overflow: "hidden",
-        backdropFilter: "blur(6px)",
-        WebkitBackdropFilter: "blur(6px)",
-      }}
-    >
-      <div
-        style={{
-          height: 36,
-          borderBottom: "1px solid var(--terminal-border)",
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: "0 12px",
-        }}
-      >
-        <span style={{ width: 10, height: 10, borderRadius: 99, background: "#ef4444" }} />
-        <span style={{ width: 10, height: 10, borderRadius: 99, background: "#f59e0b" }} />
-        <span style={{ width: 10, height: 10, borderRadius: 99, background: "#22c55e" }} />
+    <div className="terminal-card" role="presentation" aria-hidden="true">
+      <div className="terminal-topbar">
+        <span className="terminal-light light-red" />
+        <span className="terminal-light light-yellow" />
+        <span className="terminal-light light-green" />
       </div>
 
-      <pre
-        className="mono"
-        style={{
-          margin: 0,
-          padding: 16,
-          fontSize: 12,
-          lineHeight: 1.7,
-          color: "var(--text-secondary)",
-          overflowX: "auto",
-          minHeight: 164,
-        }}
-      >
-        {text}
-        {!finished && <span style={{ color: "var(--accent)" }}>|</span>}
-      </pre>
+      <div className="terminal-content mono">
+        {lines.map((line, index) => (
+          <p key={line.text} className={line.tone === "default" ? "terminal-line" : `terminal-line ${line.tone}`}>
+            {visibleLines[index]}
+            {!isFinished && cursorLine === index ? <span className="terminal-caret">▋</span> : null}
+          </p>
+        ))}
+      </div>
     </div>
   );
 }

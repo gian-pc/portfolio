@@ -3,58 +3,48 @@
 import { useTheme } from "@/features/theme/ThemeProvider";
 
 type Project = {
-  emoji: string;
-  gradient: string;
-  accent: string;
   title: string;
   description: string;
-  tags: string[];
-  highlights: { icon: string; text: string }[];
+  preview: string;
+  tech: string[];
   href: string;
-  coverByTheme?: {
+  media?: {
     light: string;
     dark: string;
   };
-  coverFit?: "cover" | "contain";
-  coverPosition?: string;
+  fallbackLabel?: string;
 };
 
 const projects: Project[] = [
   {
-    emoji: "🤖",
-    gradient: "linear-gradient(135deg,#16181F 0%,#1a1f35 100%)",
-    accent: "#6366f1",
-    title: "RetainAI",
+    title: "RetainAI Platform",
     description:
-      "Sistema de predicción de churn con ML y visualización geográfica. Finalista Oracle Hackathon.",
-    tags: ["Java", "Spring Boot", "Python", "AWS"],
-    highlights: [
-      { icon: "🧠", text: "Predicción de churn con ML" },
-      { icon: "🗺️", text: "Mapa de riesgo por distritos" },
-      { icon: "🏆", text: "Finalista Oracle Hackathon" },
-    ],
+      "Plataforma para predicción de churn con backend en Java, servicio ML y visualización geográfica para decisiones comerciales.",
+    preview: "POST /api/v1/churn/predict",
+    tech: ["Java", "Spring Boot", "FastAPI", "PostgreSQL", "Mapbox", "ElevenLabs", "Gemini"],
     href: "https://github.com/gian-pc/retainai",
-    coverByTheme: {
+    media: {
       light: "/projects/retainai-light.png",
       dark: "/projects/retainai-dark.png",
     },
-    coverFit: "contain",
-    coverPosition: "center center",
   },
   {
-    emoji: "🏠",
-    gradient: "linear-gradient(135deg,#16181F 0%,#1a2820 100%)",
-    accent: "#22c55e",
-    title: "PropChat",
+    title: "Payment Microservice",
     description:
-      "Plataforma inmobiliaria con búsqueda conversacional, Mapbox y Gemini AI como motor de recomendaciones.",
-    tags: ["FastAPI", "Next.js", "PostgreSQL", "Gemini"],
-    highlights: [
-      { icon: "🤖", text: "Motor de recomendaciones con Gemini" },
-      { icon: "📍", text: "Ubicación y capas geográficas con Mapbox" },
-      { icon: "⚡", text: "API rápida para matching de propiedades" },
-    ],
-    href: "https://github.com/gian-pc/propchat",
+      "Microservicio desacoplado de pagos con eventos de confirmación, trazabilidad y contratos API orientados a integración empresarial.",
+    preview: "event -> payment.confirmed",
+    tech: ["Spring Boot", "Docker", "AWS"],
+    href: "https://github.com/gian-pc",
+    fallbackLabel: "PAY",
+  },
+  {
+    title: "Analytics Backend",
+    description:
+      "Servicio de ingesta y procesamiento para métricas de negocio, diseñado para dashboards y monitoreo operativo en tiempo real.",
+    preview: "GET /api/v1/metrics",
+    tech: ["Java", "Microservices", "REST APIs"],
+    href: "https://github.com/gian-pc",
+    fallbackLabel: "API",
   },
 ];
 
@@ -62,232 +52,69 @@ export function Projects() {
   const { theme } = useTheme();
 
   return (
-    <section style={{ padding: "0 24px 80px" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-        {/* Header */}
-        <div style={{ marginBottom: 32 }}>
-          <h2
-            style={{
-              fontSize: 22,
-              fontWeight: 800,
-              color: "var(--text-primary)",
-              letterSpacing: -0.5,
-            }}
-          >
-            Proyectos
-          </h2>
-          <div
-            style={{
-              width: 32,
-              height: 3,
-              background: "var(--accent)",
-              borderRadius: 99,
-              marginTop: 8,
-            }}
-          />
+    <section id="projects" className="projects-section">
+      <div className="container-shell">
+        <div className="projects-header">
+          <div>
+            <p className="projects-kicker">Proyectos</p>
+            <h2 className="projects-title">Backend Projects</h2>
+          </div>
+          <span className="projects-meta">APIs · Microservices · Cloud</span>
         </div>
 
-        {/* Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
-            gap: 24,
-          }}
-        >
-          {projects.map((p) => (
-            <a
-              key={p.title}
-              href={p.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                textDecoration: "none",
-                display: "block",
-                height: "100%",
-              }}
-            >
-              <div
-                style={{
-                  borderRadius: "var(--radius-lg)",
-                  border: "1px solid var(--border)",
-                  background: "var(--surface)",
-                  overflow: "hidden",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  transition:
-                    "transform var(--duration-fast), box-shadow var(--duration-fast)",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.transform =
-                    "translateY(-4px)";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow =
-                    "0 16px 40px rgba(0,0,0,0.12)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.transform =
-                    "translateY(0)";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-                }}
-              >
-                {/* Cover */}
-                <div
-                  style={{
-                    height: 260,
-                    background: p.coverByTheme ? "var(--surface)" : p.gradient,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 40,
-                    position: "relative",
-                  }}
-                >
-                  {p.coverByTheme ? (
-                    <>
-                      {p.coverFit === "contain" && (
-                        <img
-                          src={theme === "dark" ? p.coverByTheme.dark : p.coverByTheme.light}
-                          alt=""
-                          aria-hidden="true"
-                          style={{
-                            position: "absolute",
-                            inset: 0,
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            objectPosition: p.coverPosition ?? "center",
-                            filter: "blur(8px) saturate(0.85)",
-                            opacity: 0.35,
-                            transform: "scale(1.05)",
-                          }}
-                        />
-                      )}
-                      <img
-                        src={theme === "dark" ? p.coverByTheme.dark : p.coverByTheme.light}
-                        alt={`${p.title} preview`}
-                        style={{
-                          position: "absolute",
-                          inset: 0,
-                          width: "100%",
-                          height: "100%",
-                          objectFit: p.coverFit ?? "cover",
-                          objectPosition: p.coverPosition ?? "center",
-                        }}
-                      />
-                    </>
-                  ) : (
-                    <span style={{ position: "relative", zIndex: 1 }}>{p.emoji}</span>
-                  )}
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      background:
-                        p.coverFit === "contain"
-                          ? "linear-gradient(to top, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 42%, rgba(0,0,0,0) 72%)"
-                          : "linear-gradient(to top, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.08) 42%, rgba(0,0,0,0) 72%)",
-                      zIndex: 1,
-                    }}
+        <div className="projects-grid">
+          {projects.map((project) => (
+            <article key={project.title} className="project-card">
+              <div className="project-media">
+                {project.media ? (
+                  <img
+                    src={theme === "dark" ? project.media.dark : project.media.light}
+                    alt={project.title}
+                    className="project-image"
                   />
-                </div>
+                ) : (
+                  <div className="project-fallback">{project.fallbackLabel}</div>
+                )}
+              </div>
 
-                {/* Content */}
-                <div
-                  style={{
-                    padding: "16px 20px 20px",
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <h3
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: "var(--text-primary)",
-                      marginBottom: 8,
-                    }}
-                  >
-                    {p.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: 13,
-                      lineHeight: 1.6,
-                      color: "var(--text-secondary)",
-                      marginBottom: 14,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: "vertical",
-                      minHeight: "4.8em",
-                    }}
-                  >
-                    {p.description}
-                  </p>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: 6,
-                      marginBottom: 14,
-                    }}
-                  >
-                    {p.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="mono"
-                        style={{
-                          padding: "4px 9px",
-                          borderRadius: "var(--radius-full)",
-                          border: "1px solid var(--border)",
-                          background: "rgba(0,0,0,0.02)",
-                          fontSize: 11,
-                          fontWeight: 700,
-                          color: "var(--text-secondary)",
-                          letterSpacing: 0.2,
-                        }}
-                      >
-                        {tag}
+              <div className="project-body">
+                <div className="project-top-row">
+                  <div className="project-tags-inline">
+                    {project.tech.map((tech) => (
+                      <span key={tech} className="project-tag">
+                        {tech}
                       </span>
                     ))}
                   </div>
-
-                  <div
-                    style={{
-                      borderTop: "1px solid var(--border)",
-                      paddingTop: 12,
-                      display: "grid",
-                      gap: 6,
-                      marginTop: "auto",
-                    }}
-                  >
-                    {p.highlights.map((item) => (
-                      <div
-                        key={item.text}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 8,
-                          color: "var(--text-secondary)",
-                          fontSize: 12,
-                          lineHeight: 1.45,
-                        }}
-                      >
-                        <span style={{ width: 16, textAlign: "center" }}>{item.icon}</span>
-                        <span>{item.text}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
+
+                <div className="project-title-row">
+                  <h3 className="project-title">{project.title}</h3>
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="project-link project-link-icon"
+                    aria-label={`Ver ${project.title} en GitHub`}
+                    title="GitHub"
+                  >
+                    <GitHubIcon />
+                  </a>
+                </div>
+                <p className="project-description">{project.description}</p>
               </div>
-            </a>
+            </article>
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function GitHubIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+      <path d="M12 2C6.48 2 2 6.59 2 12.24c0 4.52 2.87 8.35 6.84 9.71.5.09.68-.22.68-.5 0-.24-.01-1.03-.02-1.87-2.78.62-3.37-1.2-3.37-1.2-.45-1.2-1.11-1.52-1.11-1.52-.91-.62.07-.61.07-.61 1 .07 1.54 1.05 1.54 1.05.89 1.58 2.34 1.12 2.92.85.09-.66.35-1.12.64-1.37-2.22-.26-4.55-1.14-4.55-5.06 0-1.12.38-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.2 9.2 0 0 1 12 6.89c.85 0 1.7.12 2.5.35 1.91-1.33 2.75-1.05 2.75-1.05.54 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.8-4.57 5.06.36.31.68.94.68 1.91 0 1.38-.01 2.49-.01 2.83 0 .28.18.61.69.5A10.26 10.26 0 0 0 22 12.24C22 6.59 17.52 2 12 2" />
+    </svg>
   );
 }
