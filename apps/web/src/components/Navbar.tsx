@@ -9,7 +9,6 @@ const navLinks = [
   { label: "Inicio", href: "/" },
   { label: "Proyectos", href: "/#projects" },
   { label: "Contacto", href: "/#contact" },
-  { label: "CV", href: "/cv" },
 ];
 
 export function Navbar() {
@@ -28,7 +27,7 @@ export function Navbar() {
         <div className="nav-right">
           <nav className="nav-links" aria-label="Principal">
             {navLinks.map((link) => {
-              const isActive = link.href === "/" ? pathname === "/" : link.href === "/cv" && pathname === "/cv";
+              const isActive = link.href === "/" && pathname === "/";
               return (
                 <Link key={link.href} href={link.href} className={isActive ? "nav-link is-active" : "nav-link"}>
                   {link.label}
