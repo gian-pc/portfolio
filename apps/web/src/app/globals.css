@@ -95,7 +95,7 @@ pre,
 }
 
 .nav-shell {
-  padding: 54px 0 0;
+  padding: 44px 0 0;
 }
 
 .nav-inner {
@@ -215,7 +215,7 @@ pre,
 
 .hero-section {
   position: relative;
-  padding: 86px 0 64px;
+  padding: 62px 0 50px;
   overflow: hidden;
 }
 
@@ -225,7 +225,7 @@ pre,
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
   gap: 72px;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .hero-copy {
@@ -746,7 +746,7 @@ html:not(.dark) .hero-terminal-spot {
 }
 
 .projects-section {
-  padding: 56px 24px 92px;
+  padding: 50px 24px 82px;
 }
 
 .projects-header {
@@ -1165,7 +1165,7 @@ html:not(.dark) .hero-terminal-spot {
 .footer-shell {
   border-top: 1px solid var(--border);
   padding: 20px 0 26px;
-  margin-top: 18px;
+  margin-top: 14px;
 }
 
 .footer-inner {
@@ -1381,7 +1381,7 @@ html:not(.dark) .hero-terminal-spot {
   }
 
   .nav-shell {
-    padding: 16px 0 0;
+    padding: 20px 0 0;
   }
 
   .nav-inner {
@@ -1427,7 +1427,7 @@ html:not(.dark) .hero-terminal-spot {
   }
 
   .hero-section {
-    padding: 36px 0 36px;
+    padding: 44px 0 34px;
   }
 
   .hero-grid {
@@ -1518,7 +1518,7 @@ html:not(.dark) .hero-terminal-spot {
   }
 
   .projects-section {
-    padding: 28px 16px 66px;
+    padding: 30px 16px 60px;
   }
 
   .projects-header {
@@ -1553,7 +1553,7 @@ html:not(.dark) .hero-terminal-spot {
   }
 
   .footer-shell {
-    padding: 16px 0 22px;
+    padding: 16px 0 20px;
   }
 
   .footer-inner {

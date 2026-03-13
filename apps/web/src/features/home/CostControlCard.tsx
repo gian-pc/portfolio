@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useLanguage } from "@/features/i18n/LanguageProvider";
 
 type CostService = { name: string; amount: number };
 type CostPayload = {
@@ -53,6 +54,33 @@ function formatKpiAmount(value: number) {
 
 export function CostControlCard() {
   const [data, setData] = useState<CostPayload | null>(null);
+  const { language } = useLanguage();
+  const copy =
+    language === "es"
+      ? {
+          cardLabel: "Control de costos AWS",
+          title: "Control de costos",
+          updated: "Última actualización",
+          noData: "sin datos",
+          kpiLabel: "Métricas principales",
+          accumulated: "Acumulado",
+          forecast: "Proyección",
+          servicesLabel: "Top servicios",
+          impactLabel: "Mayor impacto en costo",
+          ceApi: "CE API",
+        }
+      : {
+          cardLabel: "AWS cost control",
+          title: "Cost control",
+          updated: "Last update",
+          noData: "no data",
+          kpiLabel: "Main metrics",
+          accumulated: "Accumulated",
+          forecast: "Forecast",
+          servicesLabel: "Top services",
+          impactLabel: "Highest cost impact",
+          ceApi: "CE API",
+        };
 
   useEffect(() => {
     let cancelled = false;
@@ -82,13 +110,13 @@ export function CostControlCard() {
   const maxAmount = Math.max(1, ...services.map((s) => s.amount));
 
   const updatedLabel = data?.updatedAt
-    ? new Intl.DateTimeFormat("es-PE", {
+    ? new Intl.DateTimeFormat(language === "es" ? "es-PE" : "en-US", {
         day: "2-digit",
         month: "short",
         hour: "2-digit",
         minute: "2-digit",
       }).format(new Date(data.updatedAt))
-    : "sin datos";
+    : copy.noData;
 
   const currency = data?.currency || "USD";
   const monthToDate = toNumber(data?.monthToDate);
@@ -96,37 +124,37 @@ export function CostControlCard() {
   const ceApi = toNumber(data?.costExplorerApi);
 
   return (
-    <article className="cost-card" aria-label="Control de costos AWS">
+    <article className="cost-card" aria-label={copy.cardLabel}>
       <header className="cost-card-head">
         <div className="cost-card-title-wrap">
           <AwsLogo />
-          <h3>Control de costos</h3>
+          <h3>{copy.title}</h3>
         </div>
         <p className="cost-card-updated-inline">
-          <span>Última actualización</span>
+          <span>{copy.updated}</span>
           <span>{updatedLabel}</span>
         </p>
       </header>
 
-      <section className="cost-kpis" aria-label="Métricas principales">
+      <section className="cost-kpis" aria-label={copy.kpiLabel}>
         <div className="cost-kpi-card">
-          <p>Acumulado</p>
+          <p>{copy.accumulated}</p>
           <strong>
             {currency} {formatKpiAmount(monthToDate)}
           </strong>
         </div>
         <div className="cost-kpi-card">
-          <p>Proyección</p>
+          <p>{copy.forecast}</p>
           <strong>
             {currency} {formatKpiAmount(forecast)}
           </strong>
         </div>
       </section>
 
-      <section className="cost-services" aria-label="Top servicios">
+      <section className="cost-services" aria-label={copy.servicesLabel}>
         <div className="cost-services-head">
-          <p>Top servicios</p>
-          <span>Mayor impacto en costo</span>
+          <p>{copy.servicesLabel}</p>
+          <span>{copy.impactLabel}</span>
         </div>
 
         {services.map((service) => {
@@ -152,7 +180,7 @@ export function CostControlCard() {
         })}
 
         <div className="cost-service-extra">
-          <span className="cost-service-extra-label">CE API</span>
+          <span className="cost-service-extra-label">{copy.ceApi}</span>
           <span className="cost-service-extra-amount">
             {currency} {ceApi.toFixed(2)}
           </span>
