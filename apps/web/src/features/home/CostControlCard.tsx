@@ -12,6 +12,7 @@ type CostPayload = {
   costExplorerApi?: number;
   services: CostService[];
 };
+type ServiceVisualKey = "lambda" | "cloudfront" | "s3" | "cost-explorer" | "tax" | "other";
 
 const FALLBACK_SERVICES: CostService[] = [
   { name: "Lambda", amount: 0 },
@@ -24,27 +25,23 @@ function toNumber(v: unknown) {
   return Number.isFinite(n) ? n : 0;
 }
 
-function serviceKey(name: string) {
-  const n = name.toLowerCase();
-  if (n.includes("lambda")) return "lambda";
-  if (n.includes("cloudfront")) return "cloudfront";
-  if (n.includes("storage") || n === "s3" || n.includes("simple storage")) return "s3";
-  return "lambda";
+function classifyService(name: string): { key: ServiceVisualKey; label: string } {
+  const n = name.toLowerCase().trim();
+  if (n.includes("lambda")) return { key: "lambda", label: "Lambda" };
+  if (n.includes("cloudfront")) return { key: "cloudfront", label: "CloudFront" };
+  if (n === "s3" || n.includes("storage") || n.includes("simple storage")) return { key: "s3", label: "S3" };
+  if (n.includes("cost explorer")) return { key: "cost-explorer", label: "Cost Explorer" };
+  if (n === "tax" || n.includes("tax")) return { key: "tax", label: "Tax" };
+  return { key: "other", label: name };
 }
 
-function serviceLabel(name: string) {
-  const key = serviceKey(name);
-  if (key === "lambda") return "Lambda";
-  if (key === "cloudfront") return "CloudFront";
-  if (key === "s3") return "S3";
-  return name;
-}
-
-function serviceIcon(name: string) {
-  const k = serviceKey(name);
-  if (k === "lambda") return "λ";
-  if (k === "cloudfront") return "☁";
-  return "▣";
+function serviceIcon(key: ServiceVisualKey) {
+  if (key === "lambda") return "λ";
+  if (key === "cloudfront") return "☁";
+  if (key === "s3") return "▣";
+  if (key === "cost-explorer") return "$";
+  if (key === "tax") return "%";
+  return "•";
 }
 
 function formatKpiAmount(value: number) {
@@ -84,6 +81,8 @@ export function CostControlCard() {
 
   useEffect(() => {
     let cancelled = false;
+    let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
+    let refreshInterval: ReturnType<typeof setInterval> | null = null;
 
     async function load() {
       try {
@@ -96,15 +95,40 @@ export function CostControlCard() {
       }
     }
 
-    load();
+    function scheduleDailyRefresh() {
+      const now = new Date();
+      const nextRun = new Date(now);
+      // Daily refresh after backend job + CDN TTL window (08:06 local time).
+      nextRun.setHours(8, 6, 0, 0);
+      if (nextRun.getTime() <= now.getTime()) {
+        nextRun.setDate(nextRun.getDate() + 1);
+      }
+
+      const initialDelay = nextRun.getTime() - now.getTime();
+      refreshTimeout = setTimeout(() => {
+        void load();
+        refreshInterval = setInterval(() => {
+          void load();
+        }, 24 * 60 * 60 * 1000);
+      }, initialDelay);
+    }
+
+    void load();
+    scheduleDailyRefresh();
+
     return () => {
       cancelled = true;
+      if (refreshTimeout) clearTimeout(refreshTimeout);
+      if (refreshInterval) clearInterval(refreshInterval);
     };
   }, []);
 
   const services = useMemo(() => {
     const raw = data?.services?.length ? data.services : FALLBACK_SERVICES;
-    return raw.map((s) => ({ name: serviceLabel(s.name), amount: toNumber(s.amount) }));
+    return raw.map((s) => {
+      const visual = classifyService(s.name);
+      return { key: visual.key, name: visual.label, amount: toNumber(s.amount) };
+    });
   }, [data]);
 
   const maxAmount = Math.max(1, ...services.map((s) => s.amount));
@@ -158,14 +182,13 @@ export function CostControlCard() {
         </div>
 
         {services.map((service) => {
-          const key = serviceKey(service.name);
           const ratio = Math.max(8, (service.amount / maxAmount) * 100);
 
           return (
-            <div key={service.name} className="cost-service-item">
+            <div key={`${service.name}-${service.amount}`} className="cost-service-item">
               <div className="cost-service-row">
                 <div className="cost-service-main">
-                  <span className={`cost-service-icon cost-service-icon-${key}`}>{serviceIcon(service.name)}</span>
+                  <span className={`cost-service-icon cost-service-icon-${service.key}`}>{serviceIcon(service.key)}</span>
                   <span>{service.name}</span>
                 </div>
                 <span className="cost-service-amount">
