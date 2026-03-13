@@ -125,10 +125,23 @@ export function CostControlCard() {
 
   const services = useMemo(() => {
     const raw = data?.services?.length ? data.services : FALLBACK_SERVICES;
-    return raw.map((s) => {
+    const prioritizedOrder: Partial<Record<ServiceVisualKey, number>> = {
+      s3: 0,
+      cloudfront: 1,
+      lambda: 2,
+    };
+
+    return raw
+      .map((s) => {
       const visual = classifyService(s.name);
       return { key: visual.key, name: visual.label, amount: toNumber(s.amount) };
-    });
+      })
+      .sort((a, b) => {
+        const aRank = prioritizedOrder[a.key] ?? 99;
+        const bRank = prioritizedOrder[b.key] ?? 99;
+        if (aRank !== bRank) return aRank - bRank;
+        return b.amount - a.amount;
+      });
   }, [data]);
 
   const maxAmount = Math.max(1, ...services.map((s) => s.amount));
