@@ -216,7 +216,7 @@ pre,
 .hero-section {
   position: relative;
   padding: 62px 0 50px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .hero-grid {
@@ -377,7 +377,7 @@ pre,
 
 .light .hero-terminal-spot,
 html:not(.dark) .hero-terminal-spot {
-  opacity: 0.7;
+  opacity: 0.24;
 }
 
 .hero-glow {
@@ -525,12 +525,13 @@ html:not(.dark) .hero-terminal-spot {
   padding: 18px 18px 20px;
   background: color-mix(in srgb, var(--surface) 74%, transparent);
   backdrop-filter: blur(10px);
-  box-shadow: 0 24px 58px rgba(3, 8, 22, 0.4);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
 }
 
 .dark .cost-card {
   border-color: rgba(59, 72, 108, 0.24);
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.62) 0%, rgba(17, 24, 39, 0.66) 100%);
+  box-shadow: 0 24px 58px rgba(3, 8, 22, 0.4);
 }
 
 .cost-card-head {
