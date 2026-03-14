@@ -46,7 +46,7 @@ const projects: Project[] = [
     },
     preview: "event -> payment.confirmed",
     tech: ["Spring Boot", "Docker", "AWS"],
-    href: "https://github.com/gian-pc",
+    href: "https://github.com/gian-pc/opsbackend-java",
     media: {
       light: "/projects/opsbackend.png",
       dark: "/projects/opsbackend.png",
@@ -75,15 +75,31 @@ export function Projects() {
           {projects.map((project) => (
             <article key={project.href + project.preview} className="project-card">
               <div className="project-media">
-                {project.media ? (
-                  <img
-                    src={theme === "dark" ? project.media.dark : project.media.light}
-                    alt={project.title[language]}
-                    className="project-image"
-                  />
-                ) : (
-                  <div className="project-fallback">{project.fallbackLabel}</div>
-                )}
+                <a
+                  href={project.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-media-link"
+                  aria-label={
+                    language === "es"
+                      ? `Abrir ${project.title[language]} en GitHub`
+                      : `Open ${project.title[language]} on GitHub`
+                  }
+                  title={language === "es" ? "Ver repositorio" : "View repository"}
+                >
+                  {project.media ? (
+                    <img
+                      src={theme === "dark" ? project.media.dark : project.media.light}
+                      alt={project.title[language]}
+                      className="project-image"
+                    />
+                  ) : (
+                    <div className="project-fallback">{project.fallbackLabel}</div>
+                  )}
+                  <span className="project-media-cta">
+                    {language === "es" ? "Ver repositorio" : "View repository"} ↗
+                  </span>
+                </a>
               </div>
 
               <div className="project-body">
