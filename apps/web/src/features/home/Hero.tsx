@@ -43,7 +43,7 @@ export function Hero() {
             <a href="#projects" className="hero-btn hero-btn-primary">
               {copy.ctaProjects}
             </a>
-            <a href="/cv/CV_GianPaucar_JavaBackend.pdf" download className="hero-btn hero-btn-secondary">
+            <a href="/CV_GianPaucar_JavaBackend.pdf" download className="hero-btn hero-btn-secondary">
               {copy.ctaCv}
             </a>
           </div>
