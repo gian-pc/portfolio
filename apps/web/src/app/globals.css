@@ -661,6 +661,13 @@ html:not(.dark) .hero-terminal-spot {
   font-weight: 600;
 }
 
+.cost-services-note {
+  margin-bottom: 8px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
 .cost-service-item + .cost-service-item {
   margin-top: 9px;
 }

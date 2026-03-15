@@ -64,7 +64,8 @@ export function CostControlCard() {
           forecast: "Proyección",
           servicesLabel: "Top servicios",
           impactLabel: "Costo por servicio",
-          ceApi: "CE API",
+          barsBasis: "% del acumulado mensual",
+          ceApi: "API Cost Explorer (estimado)",
         }
       : {
           cardLabel: "AWS cost control",
@@ -76,7 +77,8 @@ export function CostControlCard() {
           forecast: "Forecast",
           servicesLabel: "Top services",
           impactLabel: "Cost by service",
-          ceApi: "CE API",
+          barsBasis: "% of month-to-date total",
+          ceApi: "Cost Explorer API (estimated)",
         };
 
   useEffect(() => {
@@ -193,6 +195,7 @@ export function CostControlCard() {
           <p>{copy.servicesLabel}</p>
           <span>{copy.impactLabel}</span>
         </div>
+        <p className="cost-services-note">{copy.barsBasis}</p>
 
         {services.map((service) => {
           const ratio = monthToDate > 0 ? Math.min(100, (service.amount / monthToDate) * 100) : 0;
