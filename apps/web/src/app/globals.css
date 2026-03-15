@@ -160,7 +160,7 @@ pre,
 .nav-controls {
   display: inline-flex;
   align-items: center;
-  gap: 16px;
+  gap: 30px;
 }
 
 .lang-toggle,
