@@ -82,44 +82,46 @@ export function CostControlCard() {
   useEffect(() => {
     let cancelled = false;
     let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
-    let refreshInterval: ReturnType<typeof setInterval> | null = null;
 
     async function load() {
       try {
         const res = await fetch("/aws/costs/latest.json", { cache: "no-store" });
-        if (!res.ok) return;
+        if (!res.ok) return null;
         const json = (await res.json()) as CostPayload;
         if (!cancelled) setData(json);
+        return json;
       } catch {
         // keep fallback UI
+        return null;
       }
     }
 
-    function scheduleDailyRefresh() {
-      const now = new Date();
-      const nextRun = new Date(now);
-      // Daily refresh after backend job + CDN TTL window (08:06 local time).
-      nextRun.setHours(8, 6, 0, 0);
-      if (nextRun.getTime() <= now.getTime()) {
-        nextRun.setDate(nextRun.getDate() + 1);
-      }
+    function scheduleNextRefresh(latest: CostPayload | null) {
+      const now = Date.now();
+      const updatedAtMs = latest?.updatedAt ? Date.parse(latest.updatedAt) : Number.NaN;
+      const dayMs = 24 * 60 * 60 * 1000;
+      const safetyWindowMs = 5 * 60 * 1000;
+      const retryWindowMs = 60 * 60 * 1000;
 
-      const initialDelay = nextRun.getTime() - now.getTime();
-      refreshTimeout = setTimeout(() => {
-        void load();
-        refreshInterval = setInterval(() => {
-          void load();
-        }, 24 * 60 * 60 * 1000);
-      }, initialDelay);
+      const targetMs = Number.isFinite(updatedAtMs)
+        ? updatedAtMs + dayMs + safetyWindowMs
+        : now + retryWindowMs;
+
+      const delayMs = Math.max(60 * 1000, targetMs - now);
+      refreshTimeout = setTimeout(async () => {
+        const next = await load();
+        if (!cancelled) scheduleNextRefresh(next);
+      }, delayMs);
     }
 
-    void load();
-    scheduleDailyRefresh();
+    void (async () => {
+      const latest = await load();
+      if (!cancelled) scheduleNextRefresh(latest);
+    })();
 
     return () => {
       cancelled = true;
       if (refreshTimeout) clearTimeout(refreshTimeout);
-      if (refreshInterval) clearInterval(refreshInterval);
     };
   }, []);
 
