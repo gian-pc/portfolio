@@ -1,0 +1,32 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#050B1C"/>
+      <stop offset="0.55" stop-color="#081436"/>
+      <stop offset="1" stop-color="#2A1440"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="140" y1="410" x2="640" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A855F7"/>
+      <stop offset="1" stop-color="#EC4899"/>
+    </linearGradient>
+    <filter id="glow" x="350" y="80" width="760" height="460" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <ellipse cx="730" cy="290" rx="300" ry="160" fill="#9333EA" fill-opacity="0.28" filter="url(#glow)"/>
+
+  <g>
+    <rect x="140" y="90" width="220" height="54" rx="27" fill="#0B1635" stroke="#243B63"/>
+    <text x="250" y="124" text-anchor="middle" fill="#A0B2D3" font-family="Inter, Arial, sans-serif" font-size="24" letter-spacing="0.2em">JAVA BACKEND</text>
+  </g>
+
+  <text x="140" y="270" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="108" font-weight="800">gianpc</text>
+  <text x="140" y="385" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="88" font-weight="750">Java Backend</text>
+  <text x="140" y="470" fill="url(#accent)" font-family="Inter, Arial, sans-serif" font-size="88" font-weight="750">Developer</text>
+
+  <text x="140" y="550" fill="#9DB0D1" font-family="Inter, Arial, sans-serif" font-size="36">
+    Spring Boot · REST APIs · AWS
+  </text>
+</svg>

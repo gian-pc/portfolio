@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/avatar.png",
+        url: "/og-cover.svg",
         alt: "gianpc portfolio",
       },
     ],
