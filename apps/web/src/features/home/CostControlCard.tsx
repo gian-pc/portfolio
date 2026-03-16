@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useLanguage } from "@/features/i18n/LanguageProvider";
 
 type CostService = { name: string; amount: number };
@@ -34,10 +34,10 @@ function classifyService(name: string): { key: ServiceVisualKey; label: string }
   return { key: "other", label: name };
 }
 
-function serviceIcon(key: ServiceVisualKey) {
+function serviceIcon(key: ServiceVisualKey): ReactNode {
   if (key === "lambda") return "λ";
   if (key === "cloudfront") return "☁";
-  if (key === "s3") return "🪣";
+  if (key === "s3") return <S3BucketIcon />;
   if (key === "cost-explorer") return "$";
   if (key === "tax") return "%";
   return "•";
@@ -220,6 +220,16 @@ function AwsLogo() {
         aws
       </text>
       <path d="M14 17c5 3 23 3 28 0" fill="none" stroke="#ff9900" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function S3BucketIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path d="M6.5 9h11l-1 8H7.5l-1-8Z" />
+      <path d="M5.5 9c0-2.5 2.9-4.5 6.5-4.5s6.5 2 6.5 4.5" />
+      <path d="M9.5 13h5" />
     </svg>
   );
 }

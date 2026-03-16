@@ -705,6 +705,11 @@ html:not(.dark) .hero-terminal-spot {
   font-weight: 700;
 }
 
+.cost-service-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
 .cost-service-icon-lambda {
   border-color: rgba(249, 115, 22, 0.2);
   color: #fb923c;
