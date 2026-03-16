@@ -16,3 +16,23 @@ output "certificate_validation_records" {
     }
   ]
 }
+
+output "cost_card_lambda_function_name" {
+  value = aws_lambda_function.cost_card_sync.function_name
+}
+
+output "cost_card_lambda_function_arn" {
+  value = aws_lambda_function.cost_card_sync.arn
+}
+
+output "cost_card_event_rule_name" {
+  value = aws_cloudwatch_event_rule.cost_card_daily_sync.name
+}
+
+output "cost_card_event_rule_arn" {
+  value = aws_cloudwatch_event_rule.cost_card_daily_sync.arn
+}
+
+output "cost_card_object_key" {
+  value = var.cost_card_object_key
+}

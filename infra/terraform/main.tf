@@ -164,3 +164,125 @@ resource "aws_s3_bucket_policy" "site" {
   bucket = aws_s3_bucket.site.id
   policy = data.aws_iam_policy_document.site_bucket_policy.json
 }
+
+data "aws_caller_identity" "current" {}
+
+data "archive_file" "cost_card_lambda_zip" {
+  type        = "zip"
+  source_file = "${path.module}/../lambda/cost-card/index.mjs"
+  output_path = "${path.module}/.terraform/cost-card-lambda.zip"
+}
+
+data "aws_iam_policy_document" "cost_card_lambda_assume_role" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "lambda.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_role" "cost_card_lambda" {
+  name               = var.cost_card_role_name
+  description        = "Role for Lambda that generates cost JSON for portfolio card"
+  assume_role_policy = data.aws_iam_policy_document.cost_card_lambda_assume_role.json
+}
+
+data "aws_iam_policy_document" "cost_card_lambda_permissions" {
+  statement {
+    sid    = "AllowLogsWrite"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = [
+      "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:*",
+    ]
+  }
+
+  statement {
+    sid    = "AllowCostExplorerRead"
+    effect = "Allow"
+    actions = [
+      "ce:GetCostAndUsage",
+      "ce:GetCostForecast",
+    ]
+    resources = [
+      "*",
+    ]
+  }
+
+  statement {
+    sid    = "AllowCostJsonReadWrite"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+    ]
+    resources = [
+      "${aws_s3_bucket.site.arn}/${var.cost_card_object_key}",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "cost_card_lambda" {
+  name   = var.cost_card_policy_name
+  policy = data.aws_iam_policy_document.cost_card_lambda_permissions.json
+}
+
+resource "aws_iam_role_policy_attachment" "cost_card_lambda" {
+  role       = aws_iam_role.cost_card_lambda.name
+  policy_arn = aws_iam_policy.cost_card_lambda.arn
+}
+
+resource "aws_lambda_function" "cost_card_sync" {
+  function_name    = var.cost_card_function_name
+  role             = aws_iam_role.cost_card_lambda.arn
+  runtime          = var.cost_card_lambda_runtime
+  handler          = "index.handler"
+  filename         = data.archive_file.cost_card_lambda_zip.output_path
+  source_code_hash = data.archive_file.cost_card_lambda_zip.output_base64sha256
+  memory_size      = var.cost_card_lambda_memory_size
+  timeout          = var.cost_card_lambda_timeout
+
+  environment {
+    variables = {
+      BUCKET_NAME = aws_s3_bucket.site.bucket
+      OBJECT_KEY  = var.cost_card_object_key
+    }
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cost_card_lambda,
+  ]
+}
+
+resource "aws_cloudwatch_event_rule" "cost_card_daily_sync" {
+  name                = var.cost_card_event_rule_name
+  description         = "Ejecuta ${var.cost_card_function_name} diariamente"
+  schedule_expression = var.cost_card_schedule_expression
+  state               = "ENABLED"
+}
+
+resource "aws_cloudwatch_event_target" "cost_card_lambda_target" {
+  rule      = aws_cloudwatch_event_rule.cost_card_daily_sync.name
+  target_id = var.cost_card_event_target_id
+  arn       = aws_lambda_function.cost_card_sync.arn
+}
+
+resource "aws_lambda_permission" "allow_eventbridge_cost_card_daily_sync" {
+  statement_id  = var.cost_card_lambda_permission_statement_id
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.cost_card_sync.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.cost_card_daily_sync.arn
+}

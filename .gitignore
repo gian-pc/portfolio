@@ -7,5 +7,6 @@ infra/terraform/.terraform/
 infra/terraform/*.tfstate
 infra/terraform/*.tfstate.*
 infra/terraform/*.tfplan
+infra/terraform/cost-card-lambda.zip
 infra/lambda/**/function.zip
 apps/web/public/aws/costs/latest.json
