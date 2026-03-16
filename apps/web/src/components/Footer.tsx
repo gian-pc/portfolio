@@ -19,7 +19,7 @@ export function Footer() {
           <a href="mailto:gpaucarcortez@gmail.com" aria-label="Email">
             <MailIcon />
           </a>
-          <a href="/CV_GianPaucar_JavaBackend.pdf" download aria-label="Descargar CV">
+          <a href="/CV_GianPaucarCortez.pdf" download aria-label="Descargar CV">
             <DownloadIcon />
           </a>
         </div>
