@@ -8,17 +8,19 @@ import { Footer } from "@/components/Footer";
 export const metadata: Metadata = {
   metadataBase: new URL("https://gianpc.com"),
   title: {
-    default: "gianpc | Java Backend Developer",
+    default: "gianpc | Software Developer",
     template: "%s | gianpc",
   },
-  description: "Java Backend Developer especializado en Spring Boot, APIs REST y AWS.",
+  description: "Software Developer enfocado en APIs backend, arquitectura moderna y entornos cloud.",
   keywords: [
-    "Java Backend Developer",
+    "Software Developer",
+    "Backend Developer",
     "Spring Boot",
     "APIs REST",
     "AWS",
     "Microservices",
-    "Backend Engineer Peru",
+    "CI/CD",
+    "Developer Peru",
   ],
   authors: [{ name: "Gian PC" }],
   alternates: {
@@ -28,8 +30,8 @@ export const metadata: Metadata = {
     icon: "/icon.svg",
   },
   openGraph: {
-    title: "gianpc | Java Backend Developer",
-    description: "Portfolio de Java Backend Developer con foco en Spring Boot, APIs REST y AWS.",
+    title: "gianpc | Software Developer",
+    description: "Portfolio con proyectos de backend, arquitectura moderna y cloud.",
     url: "https://gianpc.com",
     siteName: "gianpc.com",
     locale: "es_PE",
@@ -40,14 +42,14 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         type: "image/jpeg",
-        alt: "gianpc - Java Backend Developer",
+        alt: "gianpc - Software Developer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "gianpc | Java Backend Developer",
-    description: "Portfolio de Java Backend Developer con foco en Spring Boot, APIs REST y AWS.",
+    title: "gianpc | Software Developer",
+    description: "Portfolio con proyectos de backend, arquitectura moderna y cloud.",
     images: ["/og-cover.jpg?v=2"],
   },
 };

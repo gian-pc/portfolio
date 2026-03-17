@@ -3,14 +3,14 @@ import { Hero } from "@/features/home/Hero";
 import { Projects } from "@/features/home/Projects";
 
 export const metadata: Metadata = {
-  title: "Java Backend Developer",
-  description: "Portfolio de Java Backend Developer con proyectos en Spring Boot, APIs REST y arquitectura en AWS.",
+  title: "Software Developer",
+  description: "Portfolio con proyectos backend reales, arquitectura moderna y cloud.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "gianpc | Java Backend Developer",
-    description: "Proyectos backend reales con Java, Spring Boot y AWS.",
+    title: "gianpc | Software Developer",
+    description: "Proyectos backend reales con arquitectura moderna y cloud.",
     url: "https://gianpc.com",
     type: "website",
     images: [
