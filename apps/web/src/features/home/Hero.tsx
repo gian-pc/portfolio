@@ -11,7 +11,7 @@ export function Hero() {
           kicker: "Software Developer",
           titleLine: "Software",
           titleAccent: "Developer",
-          description: "Desarrollo APIs y sistemas backend escalables, combinando arquitectura moderna y cloud",
+          description: "Desarrollo APIs y sistemas backend escalables, con enfoque en arquitectura moderna y entornos cloud.",
           ctaProjects: "Ver proyectos",
           ctaCv: "Descargar CV",
         }
