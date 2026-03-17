@@ -45,8 +45,8 @@ export function ContactSection() {
           error: "No se pudo enviar. Intenta nuevamente en unos minutos.",
           invalid: "Completa nombre, correo válido y mensaje.",
           missingConfig: "Falta configurar el endpoint de contacto.",
-          mapTitle: "Ubicación base",
-          mapSubtitle: "Lima, Perú · trabajo remoto",
+          mapTitle: "Ubicación",
+          mapSubtitle: "Lima, Perú",
           mapTimezone: "UTC-5 · Lima",
         }
       : {
@@ -67,8 +67,8 @@ export function ContactSection() {
           error: "Message failed. Please try again in a few minutes.",
           invalid: "Please provide name, valid email and message.",
           missingConfig: "Contact endpoint is not configured.",
-          mapTitle: "Base location",
-          mapSubtitle: "Lima, Peru · remote-friendly",
+          mapTitle: "Location",
+          mapSubtitle: "Lima, Peru",
           mapTimezone: "UTC-5 · Lima",
         };
 
