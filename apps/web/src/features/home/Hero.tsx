@@ -8,20 +8,18 @@ export function Hero() {
   const copy =
     language === "es"
       ? {
-          kicker: "Backend Developer",
-          titleLine: "Backend",
+          kicker: "Software Developer",
+          titleLine: "Software",
           titleAccent: "Developer",
-          description:
-            "Desarrollo APIs robustas y sistemas backend escalables utilizando Java, Spring Boot y arquitectura moderna orientada a productos.",
+          description: "Desarrollo APIs y sistemas backend escalables, combinando arquitectura moderna y cloud",
           ctaProjects: "Ver proyectos",
           ctaCv: "Descargar CV",
         }
       : {
-          kicker: "Backend Developer",
-          titleLine: "Backend",
+          kicker: "Software Developer",
+          titleLine: "Software",
           titleAccent: "Developer",
-          description:
-            "I build robust APIs and scalable backend systems with Java, Spring Boot, and modern product-oriented architecture.",
+          description: "I build scalable APIs and backend systems, combining modern architecture and cloud.",
           ctaProjects: "View projects",
           ctaCv: "Download CV",
         };
