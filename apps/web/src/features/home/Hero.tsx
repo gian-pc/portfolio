@@ -33,6 +33,14 @@ export function Hero() {
             <span className="hero-title-accent">{copy.titleAccent}</span>
           </h1>
 
+          <div className="hero-kickers" aria-label={language === "es" ? "Especialidades" : "Specialties"}>
+            {copy.tags.map((tag) => (
+              <span key={tag} className="hero-kicker">
+                {tag}
+              </span>
+            ))}
+          </div>
+
           <p className="hero-description">{copy.description}</p>
 
           <div className="hero-actions">
@@ -44,13 +52,6 @@ export function Hero() {
             </a>
           </div>
 
-          <div className="hero-kickers" aria-label={language === "es" ? "Especialidades" : "Specialties"}>
-            {copy.tags.map((tag) => (
-              <span key={tag} className="hero-kicker">
-                {tag}
-              </span>
-            ))}
-          </div>
         </div>
 
         <div className="hero-terminal-wrap">
