@@ -1,6 +1,6 @@
 # gianpc.com
 
-Portfolio personal orientado a backend y cloud, construido como sitio estatico y desplegado en AWS.
+Portfolio personal orientado a backend y cloud, con frontend estatico en Next.js y servicios serverless en AWS para integraciones puntuales.
 
 ## Stack
 
@@ -20,6 +20,60 @@ Portfolio personal orientado a backend y cloud, construido como sitio estatico y
 - Reescritura de rutas estaticas: CloudFront Function (`/ruta` -> `/ruta/index.html`)
 - CI/CD: GitHub Actions con rol de despliegue en AWS
 - Datos del card de costos: Lambda + Cost Explorer + JSON en S3 (`/aws/costs/latest.json`)
+- Formulario de contacto: API Gateway + Lambda + Amazon SES
+
+## Arquitectura del proyecto
+
+El repositorio esta organizado como un monorepo ligero con dos dominios principales:
+
+- `apps/web`: aplicacion frontend en Next.js 16 con App Router y export estatico.
+- `infra/`: definicion de infraestructura y funciones Lambda que soportan datos y contacto.
+
+### Capas
+
+- `src/app`: capa de entrada de Next.js. Define `layout.tsx`, metadata SEO y la composicion de la pagina principal.
+- `src/components`: componentes compartidos de layout como `Navbar` y `Footer`.
+- `src/features`: modulos por dominio funcional. Actualmente separa `home`, `theme` e `i18n`.
+- `public`: assets estaticos, imagenes de proyectos, CV y recursos usados por la UI.
+- `infra/terraform`: infraestructura declarativa para hosting, CDN, certificados, API HTTP y permisos IAM.
+- `infra/lambda`: logica serverless desacoplada del frontend.
+
+### Responsabilidades por modulo
+
+- `ThemeProvider`: maneja el tema claro/oscuro en cliente.
+- `LanguageProvider`: centraliza el idioma (`es`/`en`) y permite reutilizar copy bilingue.
+- `home/*`: compone la landing por secciones (`Hero`, `Projects`, `ContactSection`) y encapsula widgets visuales o de datos.
+- `cost-card` Lambda: consulta AWS Cost Explorer, calcula resumen mensual y publica `latest.json` en S3 para que el frontend lo consuma.
+- `contact-form` Lambda: recibe el formulario desde API Gateway, valida datos basicos y envia el correo con SES.
+
+### Flujo de arquitectura
+
+```text
+Usuario
+  -> Cloudflare (DNS)
+  -> CloudFront
+  -> S3 (sitio exportado de Next.js)
+       -> UI renderizada con assets estaticos
+       -> lectura de /aws/costs/latest.json
+
+CloudWatch/EventBridge
+  -> Lambda cost-card
+  -> AWS Cost Explorer
+  -> S3 /aws/costs/latest.json
+
+Formulario de contacto en la UI
+  -> API Gateway HTTP
+  -> Lambda contact-form
+  -> Amazon SES
+  -> correo de destino
+```
+
+### Decision arquitectonica
+
+- El frontend permanece simple y barato de operar porque se exporta como sitio estatico.
+- Las capacidades dinamicas se resuelven fuera de Next.js con Lambdas especializadas.
+- La separacion `components` vs `features` evita mezclar layout global con logica de negocio o secciones del home.
+- Terraform concentra la infraestructura para que despliegue, permisos y endpoints queden versionados junto al codigo.
 
 ## Secciones actuales
 
@@ -36,13 +90,15 @@ portfolio/
 ├── apps/
 │   └── web/
 │       ├── src/
-│       │   ├── app/
-│       │   ├── components/
-│       │   └── features/
+│       │   ├── app/                 # layout, metadata y rutas
+│       │   ├── components/          # layout compartido
+│       │   └── features/            # modulos home, theme e i18n
 │       └── public/
 ├── infra/
-│   ├── terraform/           # S3 + CloudFront + ACM + politicas
-│   └── lambda/cost-card/    # Lambda que genera latest.json de costos
+│   ├── terraform/           # hosting, CDN, API Gateway, SES, IAM y Lambdas
+│   └── lambda/
+│       ├── cost-card/       # genera latest.json de costos
+│       └── contact-form/    # envia mensajes del formulario por SES
 └── package.json
 ```
 
