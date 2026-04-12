@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useLanguage } from "@/features/i18n/LanguageProvider";
+import { CV_FILENAME, CV_URL } from "@/types/cv";
 
 type FooterLink = {
   href: string;
@@ -72,7 +73,7 @@ export function Footer() {
       icon: <MailIcon />,
     },
     {
-      href: "/CV_GianPaucarCortez.pdf",
+      href: CV_URL,
       label: "CV",
       download: true,
       ariaLabel: language === "es" ? "Descargar CV" : "Download CV",
@@ -112,7 +113,7 @@ export function Footer() {
                     className="footer-icon-link"
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
-                    download={item.download}
+                    download={item.download ? CV_FILENAME : undefined}
                     aria-label={item.ariaLabel ?? item.label}
                     title={item.label}
                   >

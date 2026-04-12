@@ -2,6 +2,7 @@
 
 import { CostControlCard } from "./CostControlCard";
 import { useLanguage } from "@/features/i18n/LanguageProvider";
+import { CV_FILENAME, CV_URL } from "@/types/cv";
 
 export function Hero() {
   const { language } = useLanguage();
@@ -47,7 +48,7 @@ export function Hero() {
             <a href="#projects" className="hero-btn hero-btn-primary">
               {copy.ctaProjects}
             </a>
-            <a href="/CV_GianPaucarCortez.pdf" download className="hero-btn hero-btn-secondary">
+            <a href={CV_URL} download={CV_FILENAME} className="hero-btn hero-btn-secondary">
               {copy.ctaCv}
             </a>
           </div>
